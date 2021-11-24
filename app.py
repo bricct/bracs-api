@@ -5,7 +5,7 @@ import secrets
 import bcrypt
 
 from sqlalchemy import Column, DECIMAL, Date, DateTime, Float, ForeignKey, Index, JSON, String, TIMESTAMP, Table, Text, text
-from sqlalchemy.dialects.mysql import VARCHAR, INTEGER
+from sqlalchemy.dialects.mysql import VARCHAR, INTEGER, TINYINT
 
 
 from sqlalchemy.ext.declarative import DeclarativeMeta
@@ -34,6 +34,7 @@ class User(db.Model):
   id = Column(INTEGER, primary_key=True)
   username = Column(VARCHAR(64), unique=True, nullable=False)
   password = Column(VARCHAR(1024), nullable=False)
+  isAdmin = Column(TINYINT, nullable=False, server_default=text('0'))
   createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
   updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
@@ -56,6 +57,17 @@ def defaultResponse(success=False):
     return response({"error":"Request Rejected"}, 200)
 
 
+def processToken(token):
+  token = token[7:]
+
+  uToken = Token.query.filter_by(token=token).one_or_none()
+
+  if uToken:
+    user = User.query.filter_by(id=uToken.userID).one_or_none()
+    return user
+
+  return None
+
 
 
 class AlchemyEncoder(json.JSONEncoder):
@@ -64,7 +76,7 @@ class AlchemyEncoder(json.JSONEncoder):
         if isinstance(obj.__class__, DeclarativeMeta):
             # an SQLAlchemy class
             fields = {}
-            restrictedFields = ['metadata', 'query', 'query_class', 'password', 'createdAt', 'updatedAt']
+            restrictedFields = ['metadata', 'query', 'query_class', 'password', 'createdAt', 'updatedAt', 'isAdmin']
             for field in [x for x in dir(obj) if not x.startswith('_') and x not in restrictedFields]:
                 data = obj.__getattribute__(field)
                 try:
@@ -101,6 +113,17 @@ def post_user():
 
 @app.route('/api/user/<int:userID>', methods=['GET'])
 def get_user(userID):
+
+  authUser = processToken(request.headers["Authorization"])
+
+  # bad token
+  if not authUser:
+    return defaultResponse()
+
+  # user is not an admin and is not getting themselves
+  if not authUser.isAdmin and authUser.id != userID:
+    return defaultResponse()
+
   user = User.query.filter_by(id=userID).first()
 
   return response(user, 200)
@@ -114,6 +137,7 @@ def get_user(userID):
 @app.route('/api/login', methods=['POST'])
 def login():
   data = json.loads(request.data)
+
   username = data['username']
   password = data['password']
 
@@ -133,6 +157,7 @@ def login():
 #@app.route('/api/reset_password', methods=['POST'])
 
   
+
 
 
 

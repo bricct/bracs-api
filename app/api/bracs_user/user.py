@@ -24,8 +24,8 @@ def post_user():
   user = User(username=username, password=password, email=email)
 
   try:
-    db.session.add(user)
-    db.session.commit()
+    db_session.add(user)
+    db_session.commit()
   except:
     # if username/email already exists return default response
     return defaultResponse()

@@ -36,3 +36,11 @@ class Team(Base):
   createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
   updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
+class Node(Base):
+  __tablename__ = "node"
+  id = Column(INTEGER, primary_key=True)
+  team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
+  lNode = Column(INTEGER, ForeignKey("node.id"), nullable=True)
+  rNode = Column(INTEGER, ForeignKey("node.id"), nullable=True)
+  createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+  updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))

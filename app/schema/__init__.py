@@ -44,3 +44,11 @@ class Node(Base):
   rNode = Column(INTEGER, ForeignKey("node.id"), nullable=True)
   createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
   updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+
+class Bracket(Base):
+  __tablename__ = "bracket"
+  id = Column(INTEGER, primary_key=True)
+  name = Column(VARCHAR(64), unique=True)
+  head = Column(INTEGER, ForeignKey("node.id"), nullable=False)
+  ownerID = Column(INTEGER, ForeignKey("user.id"), nullable=False)
+

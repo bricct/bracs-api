@@ -2,6 +2,7 @@ from sqlalchemy.ext.declarative.api import declarative_base
 import json
 from sqlalchemy import Column, DECIMAL, Date, DateTime, Float, ForeignKey, Index, JSON, String, TIMESTAMP, Table, Text, text
 from sqlalchemy.dialects.mysql import VARCHAR, INTEGER, TINYINT
+from sqlalchemy.sql.functions import user
 
 
 #from app.utils.api_imports import *
@@ -52,3 +53,17 @@ class Bracket(Base):
   head = Column(INTEGER, ForeignKey("node.id"), nullable=False)
   ownerID = Column(INTEGER, ForeignKey("user.id"), nullable=False)
 
+class Role(Base):
+  __tablename__ = "role"
+  id = Column(INTEGER, primary_key=True)
+  description = Column(VARCHAR(64))
+
+class UserOnTeam(Base):
+  user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
+  team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
+  role = Column(INTEGER, ForeignKey("role.id"), nullable=True)
+
+class UserOnBracket(Base):
+  user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
+  team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
+  role = Column(INTEGER, ForeignKey("role.id"), nullable=True)

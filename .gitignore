@@ -5,3 +5,4 @@ Scripts/
 db-credentials.txt
 pyvenv.cfg
 config/app.yaml
+bin/

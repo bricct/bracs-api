@@ -60,12 +60,14 @@ class Role(Base):
 
 class UserOnTeam(Base):
   __tablename__ = "userOnTeam"
+  id = Column(INTEGER, primary_key=True)
   user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
   team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
   role = Column(INTEGER, ForeignKey("role.id"), nullable=True)
 
 class UserOnBracket(Base):
   __tablename__ = "userOnBracket"
+  id = Column(INTEGER, primary_key=True)
   user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
   team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
   role = Column(INTEGER, ForeignKey("role.id"), nullable=True)

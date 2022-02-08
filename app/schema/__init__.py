@@ -59,11 +59,13 @@ class Role(Base):
   description = Column(VARCHAR(64))
 
 class UserOnTeam(Base):
+  __tablename__ = "userOnTeam"
   user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
   team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
   role = Column(INTEGER, ForeignKey("role.id"), nullable=True)
 
 class UserOnBracket(Base):
+  __tablename__ = "userOnBracket"
   user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
   team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
   role = Column(INTEGER, ForeignKey("role.id"), nullable=True)

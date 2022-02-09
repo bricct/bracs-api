@@ -13,3 +13,4 @@ def default():
   })
 
 from app.api.bracs_user.user import *
+from app.api.bracs_bracket.bracket import *

@@ -28,46 +28,48 @@ class Token(Base):
   createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
   updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
-class Team(Base):
-  __tablename__ = "team"
-  id = Column(INTEGER, primary_key=True)
-  name = Column(VARCHAR(64), unique=True, nullable=False)
-  image = Column(VARCHAR(64))
-  elo = Column(INTEGER, nullable=False, server_default=text('1000'))
-  createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
-  updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
-
-class Node(Base):
-  __tablename__ = "node"
-  id = Column(INTEGER, primary_key=True)
-  team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
-  lNode = Column(INTEGER, ForeignKey("node.id"), nullable=True)
-  rNode = Column(INTEGER, ForeignKey("node.id"), nullable=True)
-  createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
-  updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
-
 class Bracket(Base):
   __tablename__ = "bracket"
   id = Column(INTEGER, primary_key=True)
   name = Column(VARCHAR(64), unique=True)
-  head = Column(INTEGER, ForeignKey("node.id"), nullable=False)
+  bracketData = Column(JSON, nullable=False)
   ownerID = Column(INTEGER, ForeignKey("user.id"), nullable=False)
+  createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+  updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
-class Role(Base):
-  __tablename__ = "role"
-  id = Column(INTEGER, primary_key=True)
-  description = Column(VARCHAR(64))
+# class Team(Base):
+#   __tablename__ = "team"
+#   id = Column(INTEGER, primary_key=True)
+#   name = Column(VARCHAR(64), unique=True, nullable=False)
+#   image = Column(VARCHAR(64))
+#   elo = Column(INTEGER, nullable=False, server_default=text('1000'))
+#   createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+#   updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
-class UserOnTeam(Base):
-  __tablename__ = "userOnTeam"
-  id = Column(INTEGER, primary_key=True)
-  user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
-  team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
-  role = Column(INTEGER, ForeignKey("role.id"), nullable=True)
+# class Node(Base):
+#   __tablename__ = "node"
+#   id = Column(INTEGER, primary_key=True)
+#   team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
+#   lNode = Column(INTEGER, ForeignKey("node.id"), nullable=True)
+#   rNode = Column(INTEGER, ForeignKey("node.id"), nullable=True)
+#   createdAt = Column(TIMESTAMP, server_default=text("CURRENT_TIMESTAMP"))
+#   updatedAt = Column(TIMESTAMP, nullable=False, server_default=text("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
 
-class UserOnBracket(Base):
-  __tablename__ = "userOnBracket"
-  id = Column(INTEGER, primary_key=True)
-  user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
-  team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
-  role = Column(INTEGER, ForeignKey("role.id"), nullable=True)
+# class Role(Base):
+#   __tablename__ = "role"
+#   id = Column(INTEGER, primary_key=True)
+#   description = Column(VARCHAR(64))
+
+# class UserOnTeam(Base):
+#   __tablename__ = "userOnTeam"
+#   id = Column(INTEGER, primary_key=True)
+#   user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
+#   team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
+#   role = Column(INTEGER, ForeignKey("role.id"), nullable=True)
+
+# class UserOnBracket(Base):
+#   __tablename__ = "userOnBracket"
+#   id = Column(INTEGER, primary_key=True)
+#   user = Column(INTEGER, ForeignKey("user.id"), nullable=False)
+#   team = Column(INTEGER, ForeignKey("team.id"), nullable=True)
+#   role = Column(INTEGER, ForeignKey("role.id"), nullable=True)

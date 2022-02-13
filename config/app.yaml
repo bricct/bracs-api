@@ -1,5 +1,3 @@
 # Server version
 server_version: '1.0.0'
 flask_debug_mode: True
-database_uri: 'mysql+mysqlconnector://${DB_USER}:${DB_PASS}@${DB_URI}/${DB_NAME}'
-flask_login_secret: ${FLASK_KEY}

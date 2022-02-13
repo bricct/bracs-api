@@ -29,8 +29,12 @@ def get_user_brackets():
     return defaultResponse()
 
   bracketIDs = db_session.query(Bracket.id).filter_by(ownerID=userID).all()
+
+  ids = []
+  for i in bracketIDs:
+    ids.extend(i)
   
-  return response({"bracketIDs":bracketIDs}, 200)
+  return response({"bracketIDs":ids}, 200)
 
 
 @api.route('/post_bracket', methods=['POST'])

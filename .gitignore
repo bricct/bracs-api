@@ -6,3 +6,5 @@ db-credentials.txt
 pyvenv.cfg
 bin/
 .env
+.venv
+*.pyc

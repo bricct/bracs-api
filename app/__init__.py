@@ -1,5 +1,5 @@
 from datetime import timedelta
-from flask import Flask, session
+from flask import Flask, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 from flask_caching import Cache
@@ -54,6 +54,14 @@ def create_app(dev=False):
     session.permanent = True
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=31)
     session.modified = True
+  
+  
+  @app.route('/', methods=['GET'])
+  def default():
+    app_config = load_app_config()
+    return jsonify({
+      'version': app_config['server_version']
+    })
 
   return app
 

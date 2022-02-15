@@ -65,8 +65,15 @@ def get_user(userID):
 def login():
   data = json.loads(request.data)
 
-  identifier = data['identifier']
-  password = data['password']
+  identifier = None
+  password = None
+
+  try:
+    identifier = data['identifier']
+    password = data['password']
+  
+  except:
+    return defaultResponse()
 
   userFound = False
 

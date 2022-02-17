@@ -17,13 +17,15 @@ from app.api import api
 
 @api.route('/post_user', methods=['POST'])
 def post_user():
-  data = json.loads(request.data)
-  username = data['username']
-  email = data['email']
-  password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
-  user = User(username=username, password=password, email=email)
-
   try:
+    data = json.loads(request.data)
+    
+    username = data['username']
+    email = data['email']
+    
+    password = bcrypt.hashpw(data['password'].encode('utf-8'), bcrypt.gensalt())
+    user = User(username=username, password=password, email=email)
+
     db_session.add(user)
     db_session.commit()
   except:
@@ -38,7 +40,12 @@ def post_user():
 @api.route('/user/<int:userID>', methods=['GET'])
 def get_user(userID):
 
-  authUser = processToken(request.headers["Authorization"])
+  authUser = False
+
+  try:
+    authUser = processToken(request.headers["Authorization"])
+  except:
+    return defaultResponse()
 
   # bad token
   if not authUser:
@@ -63,12 +70,12 @@ def get_user(userID):
 
 @api.route('/login', methods=['POST'])
 def login():
-  data = json.loads(request.data)
 
   identifier = None
   password = None
 
   try:
+    data = json.loads(request.data)
     identifier = data['identifier']
     password = data['password']
   

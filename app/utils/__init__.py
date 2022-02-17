@@ -36,6 +36,6 @@ def defaultResponse(success=False):
   if success:
     return response({}, 200)
   else:
-    return response({"error":"Request Rejected"}, 200)
+    return response({"error":"Request Rejected"}, 403)
 
 

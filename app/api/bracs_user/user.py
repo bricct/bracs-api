@@ -104,7 +104,7 @@ def login():
         db.session.add(token)
         db.session.commit()
 
-        return response({"token":token.token}, 200)
+        return response({"token":token.token, "userID":user.id}, 200)
 
   # if username/email not real or password match is bad return default response
 

@@ -26,13 +26,12 @@ def create_app(dev=False):
     from dotenv import dotenv_values
     vals = dotenv_values()
 #
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(vals['DB_USER'], vals['DB_PASS'], vals['DB_URI'], vals['DB_NAME'])
-    # app.secret_key = vals['FLASK_KEY']
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(vals['DB_USER'], vals['DB_PASS'], vals['DB_URI'], vals['DB_NAME'])
+    app.secret_key = vals['FLASK_KEY']
 
   else:
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(os.environ['DB_USER'], os.environ['DB_PASS'], os.environ['DB_URI'], os.environ['DB_NAME'])
-    # app.secret_key = os.environ['FLASK_KEY']
-    app.secret_key = "f00"
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(os.environ['DB_USER'], os.environ['DB_PASS'], os.environ['DB_URI'], os.environ['DB_NAME'])
+    app.secret_key = os.environ['FLASK_KEY']
 
 
 

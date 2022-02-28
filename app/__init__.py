@@ -63,7 +63,7 @@ def create_app(dev=False):
 
   @app.errorhandler(UnableToCompleteAction)
   def unable_to_complete(err):
-    res = jsonify(error=err.error, status=err.status)
+    res = jsonify(error=str(err.error), status=err.status)
     return res 
 
   return app

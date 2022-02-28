@@ -6,13 +6,12 @@ from flask_caching import Cache
 from flask_jwt_extended import JWTManager
 import os
 
-from app.utils import load_app_config
+from app.utils import load_app_config, UnableToCompleteAction
 
 db = SQLAlchemy()
 cache = Cache(config={'CACHE_TYPE': 'simple'})
 
 from app.api import api
-
 
 def create_app(dev=False):
   app_config = load_app_config()
@@ -27,14 +26,13 @@ def create_app(dev=False):
     from dotenv import dotenv_values
     vals = dotenv_values()
 #
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(vals['DB_USER'], vals['DB_PASS'], vals['DB_URI'], vals['DB_NAME'])
-    app.secret_key = vals['FLASK_KEY']
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(vals['DB_USER'], vals['DB_PASS'], vals['DB_URI'], vals['DB_NAME'])
+    # app.secret_key = vals['FLASK_KEY']
 
   else:
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(os.environ['DB_USER'], os.environ['DB_PASS'], os.environ['DB_URI'], os.environ['DB_NAME'])
-    app.secret_key = os.environ['FLASK_KEY']
-
-
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://{}:{}@{}/{}'.format(os.environ['DB_USER'], os.environ['DB_PASS'], os.environ['DB_URI'], os.environ['DB_NAME'])
+    # app.secret_key = os.environ['FLASK_KEY']
+    app.secret_key = "f00"
 
 
 
@@ -61,7 +59,12 @@ def create_app(dev=False):
     app_config = load_app_config()
     return jsonify({
       'version': app_config['server_version']
-    })
+    }) 
+
+  @app.errorhandler(UnableToCompleteAction)
+  def unable_to_complete(err):
+    res = jsonify(error=err.error, status=err.status)
+    return res 
 
   return app
 

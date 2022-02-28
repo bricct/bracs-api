@@ -1,6 +1,14 @@
 import os, yaml, json
 from sqlalchemy.ext.declarative import DeclarativeMeta
 
+class UnableToCompleteAction(Exception):
+  status = 400
+
+  def __init__(self, error, status=None):
+    Exception.__init__(self)
+    self.error = error
+    if status is not None:
+      self.status = status
 
 class AlchemyEncoder(json.JSONEncoder):
 
@@ -37,5 +45,3 @@ def defaultResponse(success=False):
     return response({}, 200)
   else:
     return response({"error":"Request Rejected"}, 403)
-
-

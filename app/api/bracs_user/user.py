@@ -1,18 +1,15 @@
-from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
 import json
 import secrets
+
 import bcrypt
 from app import db
-from app.utils import defaultResponse, response
-from app.schema import User, Token
-
-from app.api.utils import processToken
-
-from app.utils.api_imports import *
 from app.api import api
-
-
+from app.api.utils import processToken
+from app.schema import Token, User
+from app.utils import defaultResponse, response, UnableToCompleteAction
+from app.utils.api_imports import *
+from flask import Flask, jsonify, request
+from flask_sqlalchemy import SQLAlchemy
 
 
 @api.route('/post_user', methods=['POST'])
@@ -28,9 +25,9 @@ def post_user():
 
     db_session.add(user)
     db_session.commit()
-  except:
+  except Exception as e:
     # if username/email already exists return default response
-    return defaultResponse()
+    raise UnableToCompleteAction(e)
 
   return response({"userID":user.id}, 200)
 
@@ -43,24 +40,29 @@ def get_user(userID):
   authUser = False
 
   try:
-    authUser = processToken(request.headers["Authorization"])
-  except:
-    return defaultResponse()
+    user = db_session.query(User).filter_by(id=userID).one_or_none()
+    return user 
+  except Exception as e:
+    raise UnableToCompleteAction(e)
+  # try:
+  #   authUser = processToken(request.headers["Authorization"])
+  # except:
+  #   return defaultResponse()
 
-  # bad token
-  if not authUser:
-    return defaultResponse()
+  # # bad token
+  # if not authUser:
+  #   return defaultResponse()
 
-  # user is not an admin and is not getting themselves
-  if not authUser.isAdmin and authUser.id != userID:
-    return defaultResponse()
+  # # user is not an admin and is not getting themselves
+  # if not authUser.isAdmin and authUser.id != userID:
+  #   return defaultResponse()
 
-  user = db_session.query(User).filter_by(id=userID).one_or_none()
+  # user = db_session.query(User).filter_by(id=userID).one_or_none()
 
-  if user:
-    return response(user, 200)
+  # if user:
+  #   return response(user, 200)
   
-  return response({"error":"user not found"}, 200)
+  # return response({"error":"user not found"}, 200)
 
 # @app.route('/api/modify_user', methods=['PUT'])
 # def modify_user():
@@ -79,8 +81,8 @@ def login():
     identifier = data['identifier']
     password = data['password']
   
-  except:
-    return defaultResponse()
+  except Exception as e:
+    return UnableToCompleteAction(e)
 
   userFound = False
 

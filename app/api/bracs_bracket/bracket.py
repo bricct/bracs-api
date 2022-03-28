@@ -59,25 +59,6 @@ def post_bracket():
 
   return response({"bracketID":bracket.id}, 200)
 
-# @api.route('/modify_bracket', methods=["PUT"])
-# def modify_bracket():
-#   data = json.loads(request.data)
-#   name = data['username']
-#   image = None
-#   if 'image' in data.keys():
-#     image = data['image']
-#   team = Team(name=name, image=image)
-
-#   try:
-#     db_session.add(team)
-#     db_session.commit()
-#   except:
-#     # if team with that name already exists return default response
-#     return defaultResponse()
-
-#   return response({"teamID":team.id}, 200)
-
-
 @api.route('/bracket/<int:bracketID>', methods=['GET'])
 def get_bracket(bracketID):
   

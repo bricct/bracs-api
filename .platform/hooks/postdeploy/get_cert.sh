@@ -1,1 +1,0 @@
-sudo certbot -n -d api.penis.beer --nginx --agree-tos --email trey@briccetti.com

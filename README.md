@@ -28,10 +28,22 @@ To run the application,
 flask run
 ```
 
+## Secrets configuration  
+
+As much as we would like to release the production database credentials, we feel that our users would not appreciate that - so, as an alternative, you can set
+environment variables that the application will use to configure the API appropriately. We are using [python-dotenv](https://pypi.org/project/python-dotenv/) to manage environment variables. The application looks for the following env variables using `os.environ[<var>]`:
+| Variable | Description |
+| --- | --- |
+| `DB_URI` | The database URI that should be used for the DB connection |
+| `DB_USER` | The user accessing the DB |
+| `DB_PASS` | The password for the user accessing the DB |
+| `DB_NAME` | The name of the database | 
+
+python-dotenv looks for a file called `.env` in the root directory of the project. The values should be given as key-pairs within the `.env` file. Follow the python-dotenv documentation for a full setup walkthrough.
 
 ## Usage
 
-By default the application runs on port 5000. The current API endpoints are outlined below.
+By default the API runs on port 5000. The current API endpoints are outlined below.
 
 | HTTP Action | Endpoint |
 | --- | --- |

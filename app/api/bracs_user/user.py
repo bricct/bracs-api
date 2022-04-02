@@ -31,9 +31,18 @@ def post_user():
     raise UnableToCompleteAction(e)
 
 
-@api.route('/user/<int:userID>', methods=['GET'])
-def get_user(userID):
+@api.route('/user', methods=['GET'])
+def get_user():
   try:
+    data = json.loads(request.data)
+    userID = data["userID"]
+
+    authUser = processToken(request.headers["Authorization"])
+
+    # # bad token or user is not an admin and is not getting themselves
+    if not authUser or ((not authUser.isAdmin) and authUser.id != userID):
+      return defaultResponse()
+
     user = db_session.query(User).filter_by(id=userID).one_or_none()
     return response(user, 200) 
   except Exception as e:

@@ -14,19 +14,15 @@ from app.api import api
 
 @api.route('/get_user_brackets', methods=["GET"])
 def get_user_brackets():
-  data = json.loads(request.data)
-  userID = data["userID"]
-  
   try:
+    data = json.loads(request.data)
+    userID = data["userID"]
     authUser = processToken(request.headers["Authorization"])
 
     # # bad token or user is not an admin and is not getting themselves
     if not authUser or ((not authUser.isAdmin) and authUser.id != userID):
       return defaultResponse()
-  except Exception as e:
-    raise UnableToCompleteAction(e)
 
-  try:
     bracketIDs = db_session.query(Bracket.id).filter_by(ownerID=userID).all()
 
     ids = []
@@ -59,10 +55,12 @@ def post_bracket():
 
   return response({"bracketID":bracket.id}, 200)
 
-@api.route('/bracket/<int:bracketID>', methods=['GET'])
-def get_bracket(bracketID):
+@api.route('/bracket', methods=['GET'])
+def get_bracket():
   
   try:
+    data = json.loads(request.data)
+    bracketID = data["bracketID"]
     authUser = processToken(request.headers["Authorization"])
     # bad token
     if not authUser:

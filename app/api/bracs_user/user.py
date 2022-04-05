@@ -35,6 +35,11 @@ def get_user(userID):
     try:
         authUser = processToken(request.headers["Authorization"])
 
+        # # bad token or user is not an admin and is not getting themselves
+        if not authUser or ((not authUser.isAdmin) and authUser.id != userID):
+            return defaultResponse()
+
+
         user = db_session.query(User).filter_by(id=userID).one_or_none()
         return response(user, 200)
     except Exception as e:

@@ -31,12 +31,9 @@ def post_user():
         raise UnableToCompleteAction(e)
 
 
-@api.route("/user", methods=["GET"])
-def get_user():
+@api.route("/user/<int:userID>", methods=["GET"])
+def get_user(userID):
     try:
-        data = json.loads(request.data)
-        userID = data["userID"]
-
         authUser = processToken(request.headers["Authorization"])
 
         # # bad token or user is not an admin and is not getting themselves

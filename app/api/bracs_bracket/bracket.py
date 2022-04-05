@@ -9,11 +9,9 @@ from app.utils import UnableToCompleteAction, defaultResponse, response
 from app.utils.api_imports import *
 
 
-@api.route("/get_user_brackets", methods=["GET"])
-def get_user_brackets():
+@api.route("/get_user_brackets/<int:userID>", methods=["GET"])
+def get_user_brackets(userID):
     try:
-        data = json.loads(request.data)
-        userID = data["userID"]
         authUser = processToken(request.headers["Authorization"])
 
         # # bad token or user is not an admin and is not getting themselves
@@ -27,6 +25,7 @@ def get_user_brackets():
             ids.extend(i)
 
         return response({"bracketIDs": ids}, 200)
+
     except Exception as e:
         raise UnableToCompleteAction(e)
 
@@ -46,26 +45,23 @@ def post_bracket():
     try:
         db_session.add(bracket)
         db_session.commit()
+        return response({"bracketID": bracket.id}, 200)
+
     except Exception as e:
         # if team with that name already exists
         return UnableToCompleteAction(e)
 
-    return response({"bracketID": bracket.id}, 200)
 
-
-@api.route("/bracket", methods=["GET"])
-def get_bracket():
+@api.route("/bracket/<int:bracketID>", methods=["GET"])
+def get_bracket(bracketID):
 
     try:
-        data = json.loads(request.data)
-        bracketID = data["bracketID"]
         authUser = processToken(request.headers["Authorization"])
         # bad token
         if not authUser:
             return defaultResponse()
 
         bracket = db_session.query(Bracket).filter_by(id=bracketID).one_or_none()
-
         if not authUser.isAdmin and authUser.id != bracket.ownerID:
             return defaultResponse()
 

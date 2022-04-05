@@ -48,13 +48,13 @@ def post_bracket():
         return response({"bracketID": bracket.id}, 200)
 
     except Exception as e:
-    # if team with that name already exists
+        # if team with that name already exists
         return UnableToCompleteAction(e)
 
 
 @api.route("/bracket/<int:bracketID>", methods=["GET"])
 def get_bracket(bracketID):
-  
+
     try:
         authUser = processToken(request.headers["Authorization"])
         # bad token

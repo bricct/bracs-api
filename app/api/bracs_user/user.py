@@ -30,6 +30,7 @@ def post_user():
         # if username/email already exists return default response
         raise UnableToCompleteAction(e)
 
+
 @api.route("/user/<int:userID>", methods=["GET"])
 def get_user(userID):
     try:
@@ -38,7 +39,6 @@ def get_user(userID):
         # # bad token or user is not an admin and is not getting themselves
         if not authUser or ((not authUser.isAdmin) and authUser.id != userID):
             return defaultResponse()
-
 
         user = db_session.query(User).filter_by(id=userID).one_or_none()
         return response(user, 200)

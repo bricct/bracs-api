@@ -52,7 +52,7 @@ def post_bracket():
         return UnableToCompleteAction(e)
 
 
-@api.route('/bracket/<int:bracketID>', methods=['GET'])
+@api.route("/bracket/<int:bracketID>", methods=["GET"])
 def get_bracket(bracketID):
   
     try:

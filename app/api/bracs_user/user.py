@@ -30,7 +30,7 @@ def post_user():
         # if username/email already exists return default response
         raise UnableToCompleteAction(e)
 
-@api.route('/user/<int:userID>', methods=['GET'])
+@api.route("/user/<int:userID>", methods=["GET"])
 def get_user(userID):
     try:
         authUser = processToken(request.headers["Authorization"])

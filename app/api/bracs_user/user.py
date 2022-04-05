@@ -31,7 +31,7 @@ def post_user():
     raise UnableToCompleteAction(e)
 
 
-@api.route('/user', methods=['GET'])
+@api.route('/user', methods=['POST'])
 def get_user():
   try:
     data = json.loads(request.data)

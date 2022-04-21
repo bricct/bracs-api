@@ -5,7 +5,12 @@ from flask import request
 from app.api import api
 from app.api.utils import processToken
 from app.schema import *
-from app.utils import UnableToCompleteAction, defaultResponse, response
+from app.utils import (
+    UnableToCompleteAction,
+    defaultResponse,
+    notFoundResponse,
+    response,
+)
 from app.utils.api_imports import *
 
 
@@ -44,6 +49,40 @@ def post_bracket():
 
     try:
         db_session.add(bracket)
+        db_session.commit()
+        return response({"bracketID": bracket.id}, 200)
+
+    except Exception as e:
+        # if team with that name already exists
+        return UnableToCompleteAction(e)
+
+
+@api.route("/modify_bracket", methods=["PUT"])
+def put_bracket():
+
+    try:
+
+        data = json.loads(request.data)
+
+        authUser = processToken(request.headers["Authorization"])
+
+        # bad token
+        if not authUser:
+            return defaultResponse()
+
+        bracketID = data["bracketID"]
+
+        bracket = db_session.query(Bracket).filter_by(id=bracketID).one_or_none()
+
+        if bracket is None:
+            return notFoundResponse()
+
+        if "bracketData" in data.keys():
+            bracket.bracketData = data["bracketData"]
+
+        if "name" in data.keys():
+            bracket.name = data["name"]
+
         db_session.commit()
         return response({"bracketID": bracket.id}, 200)
 

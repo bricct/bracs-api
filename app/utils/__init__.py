@@ -65,3 +65,9 @@ def defaultResponse(success=False):
         return response({}, 200)
     else:
         return response({"error": "Request Rejected"}, 403)
+
+
+def notFoundResponse():
+    return response(
+        {"error": "Unable to Locate Requested Object, ID does not exist"}, 404
+    )
